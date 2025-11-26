@@ -8,13 +8,10 @@ tmp.txt
 .*.swp
 ._*
 .DS_Store
-.vscode
-.git
 .hg
 .lock-wscript
 .svn
 .wafpickle-*
-.vscode
 CVS
 npm-debug.log
 logs
@@ -37,5 +34,4 @@ docs-md/cn/doc.md
 docs-md/en/doc.md
 docs/gitbook/gitbook-plugin-livereload/
 node_modules
-
 download

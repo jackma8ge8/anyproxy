@@ -1,30 +1,23 @@
-AnyProxy
-----------------
+### 1️、删除旧证书
+certutil -d sql:$HOME/.pki/nssdb -D -n "AnyProxy Root CA"
+###### 确认删除成功：
 
-[![NPM version][npm-image]][npm-url]
-[![node version][node-image]][node-url]
-[![npm download][download-image]][download-url]
-[![Build Status](https://travis-ci.org/alibaba/anyproxy.svg?branch=master)](https://travis-ci.org/alibaba/anyproxy)
+certutil -d sql:$HOME/.pki/nssdb -L
 
-[npm-image]: https://img.shields.io/npm/v/anyproxy.svg?style=flat-square
-[npm-url]: https://npmjs.org/package/anyproxy
-[node-image]: https://img.shields.io/badge/node.js-%3E=_6.0.0-green.svg?style=flat-square
-[node-url]: http://nodejs.org/download/
-[download-image]: https://img.shields.io/npm/dm/anyproxy.svg?style=flat-square
-[download-url]: https://npmjs.org/package/anyproxy
+### 2、重新导入（正确的信任参数）
+certutil -d sql:$HOME/.pki/nssdb \
+  -A -t "CT,C,C" \
+  -n "AnyProxy Root CA" \
+  -i ~/.anyproxy/certificates/rootCA.crt
+###### 再查一次：
+certutil -d sql:$HOME/.pki/nssdb -L
+###### 你应看到：
+AnyProxy Root CA   CT,C,C 或 AnyProxy Root CA   u,u,u
 
-AnyProxy is A fully configurable HTTP/HTTPS proxy in NodeJS.
+### 3、启动Chrome
+google-chrome --user-data-dir=/home/ubuntu/chrome-profile-anyproxy     --proxy-server="http://127.0.0.1:8001"
 
-Home page : [AnyProxy.io](http://anyproxy.io)
-
-Issue: https://github.com/alibaba/anyproxy/issues
-
-AnyProxy是一个基于NodeJS的，可供插件配置的HTTP/HTTPS代理服务器。
-
-主页：[AnyProxy.io](http://anyproxy.io)，访问可能需要稳定的国际网络环境
-
-![](https://gw.alipayobjects.com/zos/rmsportal/gUfcjGxLONndTfllxynC.jpg@_90q)
-
-----------------
-
-Legacy doc of version 3.x : https://github.com/alibaba/anyproxy/wiki/3.x-docs
+### 4、build web
+```
+cd web && npx webpack --config webpack.config.js
+```
